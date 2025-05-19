@@ -1,0 +1,2827 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商务智能复习资料</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2c3e50;
+            --secondary-dark: #1a2530;
+            --light-color: #f9f9f9;
+            --border-color: #eee;
+            --text-color: #333;
+            --box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+            background-color: var(--light-color);
+            overflow-x: hidden;
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--secondary-color);
+            margin: 15px 0 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary-color);
+            font-size: 1.8rem;
+        }
+        
+        h2 {
+            color: var(--primary-dark);
+            margin-top: 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 1.5rem;
+        }
+        
+        .question {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.2s ease;
+        }
+        
+        .question:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* 问题标题样式修改，使其更像可点击区域 */
+        .question-title {
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+            padding: 12px;
+            border-radius: 4px;
+            position: relative;
+            border: 1px solid transparent;
+        }
+        
+        .question-title:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-color: rgba(52, 152, 219, 0.2);
+        }
+        
+        /* 添加可点击提示图标 */
+        .question-title::after {
+            content: "▼";
+            color: #7f8c8d;
+            font-size: 12px;
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+            margin-right: 6px;
+        }
+        
+        /* 答案显示时的状态 */
+        .answer-visible .question-title::after {
+            transform: rotate(180deg);
+            color: var(--primary-color);
+        }
+        
+        .answer-visible .question-title {
+            border-bottom-color: var(--primary-color);
+            border-bottom-width: 2px;
+        }
+        
+        .question-title span {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .answer {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+            line-height: 1.7;
+        }
+        
+        .answer p {
+            margin-bottom: 8px;
+        }
+        
+        .answer strong {
+            color: var(--primary-dark);
+        }
+        
+        .show-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+            white-space: nowrap;
+            display: none; /* 隐藏按钮 */
+        }
+        
+        /* 语音播放按钮样式 */
+        .speak-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+            white-space: nowrap;
+            margin-left: 5px;
+            display: none; /* 默认隐藏，只对英文题目显示 */
+        }
+        
+        /* 移动端按钮增强 */
+        @media (max-width: 768px) {
+            .speak-btn {
+                padding: 6px 10px; /* 增大点击区域 */
+                font-size: 13px; /* 稍微增大字号 */
+                margin-top: 5px; /* 顶部间距 */
+                -webkit-tap-highlight-color: rgba(0,0,0,0); /* 去除点击高亮 */
+                touch-action: manipulation; /* 优化触摸操作 */
+            }
+            
+            /* 确保按钮有正确的层叠顺序和点击区域 */
+            .question-title {
+                position: relative;
+                z-index: 1;
+            }
+            
+            .question-title {
+                padding: 15px 12px; /* 增大高度提高可点击区域 */
+            }
+            
+            .question-title::after {
+                font-size: 14px; /* 更大的提示图标 */
+            }
+        }
+        
+        .chapter {
+            margin-bottom: 40px;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 15px auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        /* 控制按钮样式 */
+        .control-panel {
+            display: none; /* 在移动端隐藏顶部控制面板 */
+        }
+        
+        @media (min-width: 769px) {
+            .control-panel {
+                position: sticky;
+                top: 0;
+                background-color: rgba(255, 255, 255, 0.95);
+                padding: 15px;
+                margin-bottom: 20px;
+                border-radius: 8px;
+                box-shadow: var(--box-shadow);
+                z-index: 100;
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+        }
+        
+        .control-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        .control-btn:hover {
+            background-color: var(--secondary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .nav-panel {
+            position: sticky;
+            top: 70px;
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            z-index: 90;
+        }
+        
+        .nav-panel h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: var(--secondary-color);
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        
+        .nav-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .nav-link {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 5px;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        .nav-link:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* 返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+        }
+        
+        .back-to-top.visible {
+            opacity: 0.8;
+        }
+        
+        .back-to-top:hover {
+            opacity: 1;
+            transform: translateY(-5px);
+        }
+        
+        .back-to-top svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+            }
+            
+            .control-panel {
+                padding: 10px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .control-btn {
+                width: 100%;
+                padding: 12px;
+            }
+            
+            .question {
+                padding: 12px;
+            }
+            
+            .question-title {
+                flex-direction: row; /* 保持水平布局 */
+                align-items: center; /* 垂直居中 */
+                flex-wrap: wrap; /* 允许在需要时换行 */
+                gap: 8px; /* 减小间距 */
+            }
+            
+            .question-title span {
+                flex: 1; /* 使问题文本占据可用空间 */
+                min-width: 0; /* 允许文本在需要时收缩 */
+                margin-bottom: 0; /* 移除底部边距 */
+                font-size: 14px; /* 稍微减小字体大小 */
+            }
+            
+            .show-btn {
+                flex: 0 0 auto; /* 按钮不伸缩 */
+                width: auto; /* 自适应宽度 */
+                min-width: 60px; /* 确保最小点击区域 */
+                padding: 6px 8px; /* 调整内边距 */
+                font-size: 11px; /* 稍微减小字体 */
+            }
+            
+            .nav-panel {
+                display: none; /* 隐藏原始导航面板 */
+            }
+            
+            .hamburger-btn {
+                display: flex; /* 确保在移动端显示并使用flex布局 */
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .back-to-top {
+                width: 40px;
+                height: 40px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+        
+        /* 深色模式 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-color: #3498db;
+                --primary-dark: #2980b9;
+                --secondary-color: #2c3e50;
+                --secondary-dark: #1a2530;
+                --light-color: #121212;
+                --border-color: #333;
+                --text-color: #e0e0e0;
+                --box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            }
+            
+            body {
+                background-color: var(--light-color);
+                color: var(--text-color);
+            }
+            
+            .question {
+                background-color: #1e1e1e;
+            }
+            
+            .chapter {
+                background-color: rgba(30, 30, 30, 0.5);
+            }
+            
+            .control-panel, .nav-panel {
+                background-color: rgba(30, 30, 30, 0.95);
+            }
+            
+            .answer {
+                border-top-color: #444;
+            }
+            
+            .side-nav {
+                background-color: #1e1e1e;
+                color: var(--text-color);
+            }
+            
+            .side-nav-header {
+                border-bottom-color: #333;
+            }
+            
+            .side-nav-header h3, .side-nav-title {
+                color: #ddd;
+            }
+            
+            .side-nav-close {
+                color: #aaa;
+            }
+        }
+        
+        /* 侧边导航栏 */
+        .side-nav {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100%;
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            transition: left 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+            padding-top: 60px;
+        }
+        
+        .side-nav.open {
+            left: 0;
+        }
+        
+        .side-nav-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .side-nav-header h3 {
+            margin: 0;
+            color: var(--secondary-color);
+        }
+        
+        .side-nav-content {
+            padding: 15px;
+        }
+        
+        .side-nav-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+        }
+        
+        .side-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .side-nav-link {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .side-nav-link:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .side-nav-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #777;
+            background: none;
+            border: none;
+        }
+        
+        /* 汉堡菜单按钮 - 始终显示在移动端 */
+        .hamburger-btn {
+            display: block; /* 始终显示 */
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 999;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 桌面版隐藏汉堡按钮 */
+        @media (min-width: 769px) {
+            .hamburger-btn {
+                display: none;
+            }
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .overlay.open {
+            display: block;
+        }
+        
+        /* 模态弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+            position: relative;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #777;
+            transition: color 0.3s;
+            font-weight: bold;
+        }
+        
+        .close-btn:hover {
+            color: #333;
+        }
+        
+        .modal-title {
+            margin-top: 0;
+            color: var(--secondary-color);
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        
+        /* 随机测试样式 */
+        .test-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .chapter-btn, .all-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .chapter-btn:hover, .all-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .all-btn {
+            background-color: var(--secondary-color);
+        }
+        
+        .all-btn:hover {
+            background-color: var(--secondary-dark);
+        }
+        
+        .random-question {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .random-question h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+        
+        .random-question-text {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .random-answer {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+            display: none;
+        }
+        
+        .show-random-answer {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .show-random-answer:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .generate-btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        .generate-btn:hover {
+            background-color: #219653;
+            transform: translateY(-2px);
+        }
+        
+        .side-nav-section {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .side-nav-control {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .side-nav-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .side-nav-btn:hover {
+            background-color: var(--secondary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .side-nav-btn.primary {
+            background-color: var(--primary-color);
+        }
+        
+        .side-nav-btn.primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* 统计信息样式 */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            color: var(--secondary-color);
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .stat-item span {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        /* 筛选按钮组样式 */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-label {
+            color: var(--secondary-color);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .filter-btn {
+            background-color: #eee;
+            color: var(--secondary-color);
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+        }
+        
+        .filter-btn:hover {
+            background-color: #ddd;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* 针对移动端的样式调整 */
+        @media (max-width: 768px) {
+            .stats-container {
+                flex-direction: column;
+                gap: 5px;
+                margin: 10px 0;
+                padding: 8px;
+            }
+            
+            .filter-container {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .filter-btn {
+                width: 100%;
+                padding: 8px;
+            }
+            
+            .control-panel {
+                padding: 10px;
+            }
+        }
+        
+        /* 侧边栏筛选按钮激活状态 */
+        .side-nav-btn.active {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* 添加中文注释按钮样式 */
+        .toggle-cn-btn {
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+            white-space: nowrap;
+            margin-left: 5px;
+        }
+        
+        .toggle-cn-btn:hover {
+            background-color: #d35400;
+        }
+        
+        .chinese-note {
+            display: inline;
+        }
+        
+        .chinese-note.hidden {
+            display: none;
+        }
+        
+        /* 中文注释控制专区样式 */
+        #chinese-toggle-section {
+            background-color: rgba(230, 126, 34, 0.1);
+            border-left: 3px solid #e67e22;
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 5px;
+        }
+        
+        #chinese-toggle-section .side-nav-title {
+            color: #e67e22;
+            display: flex;
+            align-items: center;
+        }
+        
+        #chinese-toggle-section .side-nav-title::before {
+            content: "🌏";
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        #mobile-toggle-cn {
+            background-color: #e67e22;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 14px 15px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        
+        #mobile-toggle-cn:hover,
+        #mobile-toggle-cn:active {
+            background-color: #d35400;
+        }
+        
+        #mobile-toggle-cn::before {
+            content: "中/EN";
+            background-color: white;
+            color: #e67e22;
+            font-size: 12px;
+            border-radius: 4px;
+            padding: 2px 4px;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        /* 按钮显示控制样式 */
+        #buttons-control-section {
+            background-color: rgba(155, 89, 182, 0.1);
+            border-left: 3px solid #9b59b6;
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 5px;
+        }
+        
+        #buttons-control-section .side-nav-title {
+            color: #9b59b6;
+            display: flex;
+            align-items: center;
+        }
+        
+        #buttons-control-section .side-nav-title::before {
+            content: "🎛️";
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        #toggle-all-buttons {
+            background-color: #9b59b6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 14px 15px;
+            font-size: 15px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        #toggle-all-buttons:hover,
+        #toggle-all-buttons:active {
+            background-color: #8e44ad;
+        }
+        
+        #toggle-all-buttons::before {
+            content: "按钮";
+            background-color: white;
+            color: #9b59b6;
+            font-size: 12px;
+            border-radius: 4px;
+            padding: 2px 4px;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        /* 按钮隐藏时的样式 */
+        .question-buttons-hidden .show-btn,
+        .question-buttons-hidden .toggle-cn-btn,
+        .question-buttons-hidden .speak-btn {
+            display: none !important;
+        }
+        
+        /* 快速恢复按钮的浮动图标 */
+        #restore-buttons-icon {
+            position: fixed;
+            bottom: 75px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: #9b59b6;
+            color: white;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            cursor: pointer;
+            font-size: 22px;
+            transition: all 0.3s ease;
+        }
+        
+        #restore-buttons-icon:hover,
+        #restore-buttons-icon:active {
+            background-color: #8e44ad;
+            transform: scale(1.05);
+        }
+        
+        .question-buttons-hidden #restore-buttons-icon {
+            display: flex;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(155, 89, 182, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(155, 89, 182, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(155, 89, 182, 0);
+            }
+        }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+            }
+            
+            .control-panel {
+                padding: 10px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .control-btn {
+                width: 100%;
+                padding: 12px;
+            }
+            
+            .question {
+                padding: 12px;
+            }
+            
+            .question-title {
+                flex-direction: row; /* 保持水平布局 */
+                align-items: center; /* 垂直居中 */
+                flex-wrap: wrap; /* 允许在需要时换行 */
+                gap: 8px; /* 减小间距 */
+            }
+            
+            .question-title span {
+                flex: 1; /* 使问题文本占据可用空间 */
+                min-width: 0; /* 允许文本在需要时收缩 */
+                margin-bottom: 0; /* 移除底部边距 */
+                font-size: 14px; /* 稍微减小字体大小 */
+            }
+            
+            .show-btn {
+                flex: 0 0 auto; /* 按钮不伸缩 */
+                width: auto; /* 自适应宽度 */
+                min-width: 60px; /* 确保最小点击区域 */
+                padding: 6px 8px; /* 调整内边距 */
+                font-size: 11px; /* 稍微减小字体 */
+            }
+            
+            .toggle-cn-btn {
+                padding: 6px 10px;
+                font-size: 11px;
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+                touch-action: manipulation;
+            }
+            
+            .nav-panel {
+                display: none; /* 隐藏原始导航面板 */
+            }
+            
+            .hamburger-btn {
+                display: flex; /* 确保在移动端显示并使用flex布局 */
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .back-to-top {
+                width: 40px;
+                height: 40px;
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            /* 侧边栏中的中文切换按钮突出显示 */
+            #side-toggle-all-cn {
+                font-weight: bold;
+            }
+            
+            /* 移动端浮动按钮位置调整 */
+            #restore-buttons-icon {
+                bottom: 20px;
+                right: 70px;  /* 避免与返回顶部按钮重叠 */
+            }
+            
+            /* 移动端按钮控制专区强调 */
+            #buttons-control-section {
+                margin-top: 10px;
+                margin-bottom: 10px;
+                border-width: 4px;
+            }
+            
+            #toggle-all-buttons {
+                padding: 15px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <h1>商务智能复习资料</h1>
+    
+    <!-- 控制面板 (桌面版) -->
+    <div class="control-panel">
+        <button class="control-btn" id="show-all">显示所有答案</button>
+        <button class="control-btn" id="hide-all">隐藏所有答案</button>
+        <button class="control-btn" id="random-test">随机测试</button>
+        <div class="stats-container">
+            <div class="stat-item">总题数：<span id="total-questions">0</span></div>
+            <div class="stat-item">答案总字数：<span id="total-words">0</span></div>
+        </div>
+        <div class="filter-container">
+            <span class="filter-label">筛选：</span>
+            <button class="filter-btn" id="show-all-types">全部题型</button>
+            <button class="filter-btn" id="show-definitions">名词解释</button>
+            <button class="filter-btn" id="show-short-answers">简答题</button>
+        </div>
+    </div>
+    
+    <!-- 侧边导航栏 -->
+    <div class="side-nav" id="sideNav">
+        <button class="side-nav-close" id="closeSideNav">&times;</button>
+        <div class="side-nav-header">
+            <h3>商务智能复习资料</h3>
+        </div>
+        <div class="side-nav-content">
+            <!-- 控制按钮区域 -->
+            <div class="side-nav-section">
+                <div class="side-nav-title">操作菜单</div>
+                <div class="side-nav-control">
+                    <button class="side-nav-btn" id="side-show-all">显示所有答案</button>
+                    <button class="side-nav-btn" id="side-hide-all">隐藏所有答案</button>
+                    <button class="side-nav-btn primary" id="side-random-test">随机测试</button>
+                </div>
+            </div>
+            
+            <!-- 筛选按钮区域 -->
+            <div class="side-nav-section">
+                <div class="side-nav-title">题型筛选</div>
+                <div class="side-nav-control">
+                    <button class="side-nav-btn" id="side-show-all-types">全部题型</button>
+                    <button class="side-nav-btn" id="side-show-definitions">名词解释</button>
+                    <button class="side-nav-btn" id="side-show-short-answers">简答题</button>
+                </div>
+            </div>
+            
+            <!-- 章节导航区域 -->
+            <div class="side-nav-section">
+                <div class="side-nav-title">章节导航</div>
+                <div class="side-nav-links" id="sideNavLinks">
+                    <!-- 由 JavaScript 动态填充 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 遮罩层 -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- 汉堡菜单按钮 -->
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="菜单">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+    
+    <div id="content">
+        <!-- 第一章 -->
+        <div class="chapter">
+            <h2>第一章</h2>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>1.商务智能面临的直接环境和全球环境包含哪些？</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>直接环境因素：供应商，客户，竞争对手，股东。</p>
+                    <p>全球环境因素：政治因素，经济形式，科技发展，国际变革。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>2.商务智能的定义</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>商务智能指企业利用现代信息技术从内外部收集数据，经过清洗、存储、综合数据，并通过先进技术工具分析，为管理者提供决策知识与洞察力，提升商务决策水平及企业竞争力。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>3.商务智能数据来源</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p><strong>商务智能数据来源（企业内部）：</strong></p>
+                    <p>业务处理系统(TPS)</p>
+                    <p>管理信息系统(MIS)</p>
+                    <p>决策支持系统（DSS）</p>
+                    <p>企业资源计划（ERP)</p>
+                    <p>供应链管理系统（SCM)</p>
+                    <p>客户关系管理系统（CRM)</p>
+                    <p>知识管理系统（KMS)</p>
+                    <p><strong>商务智能数据来源（企业外部）</strong></p>
+                    <p>竞争对手</p>
+                    <p>政府部门</p>
+                    <p>互联网</p>
+                    <p>金融机构</p>
+                    <p>第三方数据</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>4.商务智能的作用</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>1.提升运营管理水平</p>
+                    <p>2.改善绩效</p>
+                    <p>3.加强与客户及供应商的联系</p>
+                    <p>4.获取竞争优势</p>
+                    <p>5.精准预测</p>
+                    <p>6.自动化决策制定</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>5.数据的定义</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>数据是事实或观察的结果，是对客观事物的逻辑归纳，是用于表示客观事物的未经加工的原始素材或原始事实流。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>6.决策的分类</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>按管理层次：战略决策，战术决策，业务决策。</p>
+                    <p>按性质：结构化决策，非结构化决策，半结构化决策。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第二章 -->
+        <div class="chapter">
+            <h2>第二章</h2>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>1.数据仓库的定义</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>数据仓库是一个面向主题的、集成的、相对稳定的、反映历史变化的数据集合，用于支持管理决策.</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>2.数据仓库特点</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>面向主题的，集成的，反应历史变化，相对稳定的，其他特点。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>3.元数据的定义</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>元数据是描述数据仓库内数据的结构和建立方法的数据，</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>4.元数据可以分为几类，分别是什么意思</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>元数据可分为技术元数据和业务元数据。</p>
+                    <p>技术元数据：描述数据仓库开发、管理、维护相关数据，包括数据源、转换、模型、清洗规则等，服务于技术人员。</p>
+                    <p>业务元数据：描述业务术语、数据内容、位置、可用性等，服务于管理层和业务人员，便于理解数据仓库数据。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>5.ETL的定义</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>ETL是数据仓库的核心技术流程，也是任何以数据为中心的项目的集成组件。</p>
+                    <p>提取（extract)是指从一个或多个数据库、或其他数据源中读取数据；转换（transform)是将提取后的数据由一种数据类型转换为另一种数据类型，；加载（load)是指将数据加载到数据库中。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第三章 -->
+        <div class="chapter">
+            <h2>第三章</h2>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>1.OLAP定义</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>OLAP能让管理人员从多种角度对从原始数据中转化出来的、能够真正为用户所理解的并真实反映业务维特性的信息进行快速、一致和交互的存取，从而获得对数据更加深人的理解。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>2.OLAP包含哪些方面</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>维，维的层次，维成员，度量</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>3.OLAP与OLTP的比较</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>OLAP与OLTP的比较：</p>
+                    <img src="3-3题.png" alt="OLAP与OLTP比较表格1" class="answer-image">
+                    <img src="3-3.1.png" alt="OLAP与OLTP比较表格2" class="answer-image">
+                   <P>OLAP：智能决策支持，面向决策层，用户少，数据源为数据仓库 / 集市。数据具历史、聚集、多维、统一性；报表即席多维，关注面宽；需多处理器与大存储库，读写数十条，处理快。</P> 
+                   <p>OLTP：日常业务运营，面向操作层，用户多，数据源为事务数据库。数据呈原始、当前、细节、二维、分立性；报表常规定期，关注面窄；用普通库，读万千条，处理慢。</p>
+
+                  
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>4.多维度数据模型的定义</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>多维度数据模型是面向分析的数据模型，能够提供多种观察的数据视图，支持面向分析的操作。主要由事实表和维度表组成</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>5.OLAP主要操作</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>切片和切块、钻取、旋转。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第四章 -->
+        <div class="chapter">
+            <h2>第四章</h2>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>1.属性的类型</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>标称属性、二元属性、序数属性、数值属性。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>2.数据相似性和数据相异性的概念</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>数据相似性：如果两个对象i和不相似，则它们的相似度返回0，相似性值越高，表示对象之间的相似程度越大，值1指示完全两个对象完全相似。</p>
+                    <p>数据相异性：相异性正好相反，如果对象相同，则它返回值0，相异性值越大表示两个对象差异越大。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>3.数据预处理四个方面</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>数据清洗、数据集成、数据规约以及数据变换</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>4.数据归约包含哪几个方面</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>维归约、数量归约和数据压缩。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>5.数据变换的规范化的两种方法</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>1.最小-最大规范化</p>
+                    <p>2.零-均值规范化</p>
+                    <img src="4-5.png" alt="数据变换规范化方法" class="answer-image">
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>6.数据挖掘的概念</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>数据挖掘是从大量数据中挖掘有趣模式和知识的过程</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>7.知识发现的过程</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>数据清理，数据集成，数据选择，数据转换，数据挖掘，模式评估，知识表示</p>
+                    <img src="4-7.png" alt="知识发现过程" class="answer-image">
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>8.数据挖掘的两个模型</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>SEMMA模型：分别代表：数据取样，数据探索，数据调整，数据建模，模型评价。</p>
+                    <p>CRISP-DM模型。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第五章 -->
+        <div class="chapter">
+            <h2>第五章</h2>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>1.关联规则的概念</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>关联规则是形如A→B蕴含的表达式，其中A和B是不相交的项集，A称为规则的前件，而B称为规则的后件。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>2.项集</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>包含0个或多个项的集合，如{牛奶}构成一个一项集，{牛奶，尿布，面包}构成一个三项集。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>3.支持度</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>含项集的事务数与总事务数的比值</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>4.频繁项</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>在多个事务中频繁出现的项就是频繁项。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>5.频繁项集</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>假设有一系列的事务，将这些事务中同时出现的频繁项组成一个子集，且子集满足最小支持度阈值，这个集合称为频繁项集.</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>6.置信度</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>项集A出现后，另一项集B出现的概率，或者说两个项集的条件概率</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>7.关联规则挖掘要经过哪两个阶段</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>第一阶段从资料集合中找出所有的频繁项集，即项集的支持度均大于等于最小支持度阈值；</p>
+                    <p>第二阶段从频繁项中产生关联规则。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第六章 -->
+        <div class="chapter">
+            <h2>第六章</h2>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>1.分类的概念</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>是一种有监督的学习过程，即训练集中记录的类别是已知的，分类过程是将每一条记录归到对应的类别之中。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>2.分类基本过程</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>训练阶段，测试阶段</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>3.基础分类算法（抽1-2种算法考）</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p><strong>一、决策树分类器</strong></p>
+                    <p><strong>原理</strong>：通过递归选择最优属性划分数据集，构建树形结构，叶节点为类别，内部节点为属性测试，使划分后的子集尽可能纯。</p>
+                    <p><strong>核心</strong>：基于信息增益（ID3）、增益率（C4.5）或Gini指数（CART）选择分裂属性，通过剪枝避免过拟合。</p>
+                    <p><strong>二、朴素贝叶斯分类器</strong></p>
+                    <p><strong>原理</strong>：基于贝叶斯定理，假设属性条件独立，计算样本属于各分类的后验概率，取概率最高的类别。</p>
+                    <p><strong>核心</strong>：利用先验概率和类条件概率（假设属性独立），适用于文本分类等稀疏高维数据。</p>
+                    <p><strong>三、最近邻分类器（KNN）</strong></p>
+                    <p><strong>原理</strong>：对未知样本，找到训练集中k个最近邻，根据多数邻居的类别投票决策。</p>
+                    <p><strong>核心</strong>：依赖距离度量（如欧氏距离）和k值选择，k小易受噪声影响，k大需平衡局部与全局相似性。</p>
+                    <p><strong>四、逻辑回归</strong></p>
+                    <p><strong>原理</strong>：通过Sigmoid函数将线性组合转换为0-1概率，根据概率阈值（如0.5）判断二分类。</p>
+                    <p><strong>核心</strong>：线性模型+概率输出，最大化似然函数优化参数，适用于线性可分场景的概率预测。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第七章 -->
+        <div class="chapter">
+            <h2>第七章</h2>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>1.什么是聚类</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>聚类是把数据集分成不同的簇或类别，其中数据集中的所有样本被划分为若干个不相交的子集，每个子集称为一个"簇"，要求簇内的数据对象之间尽可能地相似，而不同簇的数据对象尽可能不同</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>2.聚类的过程</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>（1）数据准备：包括对数据特征进行标准化、属性降维、噪声处理。</p>
+                    <p>（2）特征选择：从最初的特征集中选择最有代表性的特征或特征组合，并将其存储于向量中。</p>
+                    <p>（3）特征提取：通过对所选择的特征进行转换进而形成新的特征。</p>
+                    <p>（4）聚类：选择适合特征类型的某种距离函数进行接近度或相似度的测量，而后根据距离进行聚类或分组。</p>
+                    <p>（5）结果评估：对聚类结果进行评估，评估主要有3种：外部有效性评估、内部有效性评估和相关性测试评估。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>3.划分算法</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>K-means算法原理：</p>
+                    <p>掌握7-4的公式，如何计算误差平方和</p>
+                    <img src="7-3.png" alt="K-means算法误差平方和计算公式" class="answer-image">
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>4.K-means算法步骤</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>1.任选k个对象作为初始化的簇中心</p>
+                    <p>2.repeat</p>
+                    <p>3.计算对象与每个中心的距离，将每一对象赋给"最近"的簇</p>
+                    <p>4.重新计算每个簇的平均值，选定新的簇中心</p>
+                    <p>5.Until不再发生变化</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>5.K-medoids算法步骤</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>步骤：</p>
+                    <p>（1）任意选取k个初始中心点</p>
+                    <p>(2）repeat</p>
+                    <p>（3）按照与medoids最近的原则，将剩余点分配到当前最佳的medoids所代表的类或簇中</p>
+                    <p>（4）在每一类或簇中，计算每个样本点与其他点的距离之和，选取距离之和最小的点作为新的medoids</p>
+                    <p>(5）Until重复（3）（4)的过程，直到所有的中心点不再发生变化，或已达到设定的最大选代次数</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>6.K-means算法和K-medoids算法区别</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>两个算法不一样的地方在于中心点的选取方式不同，在K-means算法将中心点取为当前簇中所有数据点的平均值，而K-medoids算法从前簇中选取这样一个点即它到其他所有（当前簇中的）点的距离之和最小作为中心点</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>7.凝聚型层次聚类步骤</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>（1）将每个对象看作一个类，计算两两之间的最小距离</p>
+                    <p>(2）repeat</p>
+                    <p>（3）将距离最小的两个类合并成一个新类</p>
+                    <p>（4）重新计算新类与所有类之间的距离</p>
+                    <p>（5）Until重复（3）（4）的过程，直到所有类最后合并成一类</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>8.异常值检测</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>【注意：原文中未提供具体内容，仅有标题和页码参考104页】</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第八章 -->
+        <div class="chapter">
+            <h2>第八章</h2>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>1.文本分析通常包括以下四个关键步骤</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>数据获取，数据预处理，文本挖掘，数据可视化</p>
+                    <img src="8-1.png" alt="文本分析关键步骤" class="answer-image">
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>2.自然语言处理基础技术有哪些</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>分词、词法分析、句法分析、语义分析、语用分析，篇章分析</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>3.文本挖掘的概念</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>是抽取有效、新颖、有用、可理解的、散布在文本文件中的有价值知识，并且利用这些知识更好地组织信息的过程</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>4.文本特征提取的两个方法</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>（1）文档频率（DF）。DF统计特征词出现的文档数量，用来衡量某个特征词的重要性。</p>
+                    <p>（2）词频-逆文档频率（termfrequency-inversedocumentfrequency，TF-IDF）：TF-IDF用以评估一个词对于一个文本集或一个语料库中的其中一个文本的重要程度，一个词的重要程度跟它在文本中出现的次数成正比，也跟它在文本集或语料库中出现的次数成反比。这</p>
+                    <p>如何计算：</p>
+                    <img src="8-4.png" alt="TF-IDF计算公式" class="answer-image">
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>5.情感分析定义</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>情感分析是指利用自然语言处理和文本挖掘技术，对带有感情色彩的主观性文本进行分析、处理和抽取的过程。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 第九章 -->
+        <div class="chapter">
+            <h2>第九章</h2>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>1.WEB数据的特点包括</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>1.异构数据库环境</p>
+                    <p>2.分布式数据源</p>
+                    <p>3.半结构化</p>
+                    <p>4.动态性强</p>
+                    <p>5.丰富的多样性</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>2.WEB挖掘包含哪三类</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>Web内容挖掘、Web结构挖掘、Web使用挖掘。</p>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-title">
+                    <span>3.PageRank的基本思想</span>
+                    <button class="show-btn">显示答案</button>
+                </div>
+                <div class="answer">
+                    <p>一个页面被多次引用，则这个页面很可能是重要的；一个页面尽管没有被多次引用，但被一个重要页面引用，该页面也可能是很重要的；一个页面的重要性被均分并被传递到它所引用的页面。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 添加返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" title="返回顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 15l-6-6-6 6"/>
+        </svg>
+    </button>
+    
+    <!-- 随机测试模态窗口 -->
+    <div id="testModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 class="modal-title">随机测试</h2>
+            <p>选择一个章节或全部内容进行随机测试：</p>
+            
+            <div class="test-options">
+                <!-- 将由JavaScript动态添加 -->
+            </div>
+            
+            <div id="randomQuestionContainer"></div>
+        </div>
+    </div>
+    
+    <script>
+        // 原始脚本保持不变
+        // 获取所有显示/隐藏答案按钮
+        const showButtons = document.querySelectorAll('.show-btn');
+        
+        // 为每个按钮添加点击事件
+        showButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // 找到当前问题的答案区域
+                const answer = this.parentElement.nextElementSibling;
+                
+                // 切换答案的显示状态
+                if (answer.style.display === 'block') {
+                    answer.style.display = 'none';
+                    this.textContent = '显示答案';
+                } else {
+                    answer.style.display = 'block';
+                    this.textContent = '隐藏答案';
+                }
+                
+                // 更新统计信息
+                updateStats();
+            });
+        });
+        
+        // 处理标题中的中文注释
+        function setupChineseNotes() {
+            // 获取所有问题标题
+            const questionTitles = document.querySelectorAll('.question-title span');
+            
+            // 遍历每个标题
+            questionTitles.forEach(titleSpan => {
+                const titleText = titleSpan.textContent;
+                
+                // 检查标题是否包含中文注释（以中文括号开始）
+                const chineseNoteMatch = titleText.match(/（.*?）/);
+                if (chineseNoteMatch) {
+                    // 分离英文和中文部分
+                    const englishPart = titleText.substring(0, chineseNoteMatch.index);
+                    const chinesePart = chineseNoteMatch[0];
+                    
+                    // 创建新的HTML结构
+                    titleSpan.innerHTML = englishPart + 
+                        '<span class="chinese-note">' + chinesePart + '</span>';
+                    
+                    // 不再创建每个题目的切换中文注释按钮
+                }
+                
+                // 处理完全中文的标题（无需添加按钮）
+                const isChinese = /^[\u4e00-\u9fa5\s，。？！、；：""''「」『』（）]+$/.test(titleText);
+                if (isChinese) {
+                    return; // 跳过完全中文的标题
+                }
+                
+                // 处理"english(英文缩写)（中文解释）"格式
+                const complexPattern = /([A-Za-z\s\-]+)\(([A-Za-z\s\-]+)\)（([\u4e00-\u9fa5\s]+)）/;
+                const complexMatch = titleText.match(complexPattern);
+                if (complexMatch && !chineseNoteMatch) {
+                    const term = complexMatch[1];
+                    const abbr = complexMatch[2];
+                    const chinese = complexMatch[3];
+                    
+                    // 创建新的HTML结构
+                    titleSpan.innerHTML = term + '(' + abbr + ')<span class="chinese-note">（' + chinese + '）</span>';
+                    
+                    // 不再创建每个题目的切换中文注释按钮
+                }
+                
+                // 处理"中文（英文）"格式
+                const reversedPattern = /([\u4e00-\u9fa5]+)（([A-Za-z\s\-]+)）/;
+                const reversedMatch = titleText.match(reversedPattern);
+                if (reversedMatch && !chineseNoteMatch && !complexMatch) {
+                    // 对于这种格式，原本就不添加切换按钮，因为中文是主体内容
+                    return;
+                }
+            });
+            
+            // 在全局控制按钮中添加显示/隐藏中文的功能
+            const controlPanel = document.querySelector('.control-panel');
+            if (controlPanel) {
+                const toggleAllChineseBtn = document.createElement('button');
+                toggleAllChineseBtn.className = 'control-btn';
+                toggleAllChineseBtn.id = 'toggle-all-cn';
+                toggleAllChineseBtn.textContent = '隐藏所有中文';
+                toggleAllChineseBtn.addEventListener('click', function() {
+                    const allChineseNotes = document.querySelectorAll('.chinese-note');
+                    
+                    // 检查是否有至少一个中文注释是可见的
+                    let hasVisible = false;
+                    for (const note of allChineseNotes) {
+                        if (!note.classList.contains('hidden')) {
+                            hasVisible = true;
+                            break;
+                        }
+                    }
+                    
+                    // 根据状态显示或隐藏所有中文注释
+                    if (hasVisible) {
+                        // 隐藏所有中文注释
+                        allChineseNotes.forEach(note => note.classList.add('hidden'));
+                        this.textContent = '显示所有中文';
+                    } else {
+                        // 显示所有中文注释
+                        allChineseNotes.forEach(note => note.classList.remove('hidden'));
+                        this.textContent = '隐藏所有中文';
+                    }
+                });
+                
+                // 添加按钮到控制面板
+                const filterContainer = controlPanel.querySelector('.filter-container');
+                if (filterContainer) {
+                    filterContainer.parentNode.insertBefore(toggleAllChineseBtn, filterContainer);
+                } else {
+                    controlPanel.appendChild(toggleAllChineseBtn);
+                }
+                
+                // 添加到侧边栏控制区域
+                const sideNavControl = document.querySelector('.side-nav-control');
+                if (sideNavControl) {
+                    const sideToggleAllChineseBtn = document.createElement('button');
+                    sideToggleAllChineseBtn.className = 'side-nav-btn';
+                    sideToggleAllChineseBtn.id = 'side-toggle-all-cn';
+                    sideToggleAllChineseBtn.textContent = '隐藏所有中文';
+                    sideToggleAllChineseBtn.setAttribute('aria-label', '显示或隐藏所有中文注释');
+                    
+                    sideToggleAllChineseBtn.addEventListener('click', function() {
+                        document.getElementById('toggle-all-cn').click();
+                        // 更新按钮文本以保持一致性
+                        setTimeout(() => {
+                            this.textContent = document.getElementById('toggle-all-cn').textContent.replace('所有', ''); 
+                        }, 10);
+                    });
+                    
+                    // 将按钮添加为第一个子元素以提高其优先级
+                    if (sideNavControl.firstChild) {
+                        sideNavControl.insertBefore(sideToggleAllChineseBtn, sideNavControl.firstChild);
+                    } else {
+                        sideNavControl.appendChild(sideToggleAllChineseBtn);
+                    }
+                    
+                    // 添加中文切换按钮专属的标题区域
+                    const chineseToggleSection = document.createElement('div');
+                    chineseToggleSection.className = 'side-nav-section';
+                    chineseToggleSection.id = 'chinese-toggle-section';
+                    
+                    const chineseToggleTitle = document.createElement('div');
+                    chineseToggleTitle.className = 'side-nav-title';
+                    chineseToggleTitle.textContent = '中文注释控制';
+                    
+                    const chineseToggleControl = document.createElement('div');
+                    chineseToggleControl.className = 'side-nav-control';
+                    
+                    const mobileToggleCnBtn = document.createElement('button');
+                    mobileToggleCnBtn.className = 'side-nav-btn';
+                    mobileToggleCnBtn.id = 'mobile-toggle-cn';
+                    mobileToggleCnBtn.textContent = '隐藏所有中文注释';
+                    mobileToggleCnBtn.addEventListener('click', function() {
+                        document.getElementById('toggle-all-cn').click();
+                        // 更新按钮文本以保持一致性
+                        setTimeout(() => {
+                            this.textContent = document.getElementById('toggle-all-cn').textContent;
+                        }, 10);
+                    });
+                    
+                    chineseToggleControl.appendChild(mobileToggleCnBtn);
+                    chineseToggleSection.appendChild(chineseToggleTitle);
+                    chineseToggleSection.appendChild(chineseToggleControl);
+                    
+                    // 插入到侧边导航的合适位置
+                    const sideNavContent = document.querySelector('.side-nav-content');
+                    if (sideNavContent) {
+                        // 插入到第一个section后面
+                        const firstSection = sideNavContent.querySelector('.side-nav-section');
+                        if (firstSection) {
+                            sideNavContent.insertBefore(chineseToggleSection, firstSection.nextSibling);
+                        } else {
+                            sideNavContent.appendChild(chineseToggleSection);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // 语音播放功能
+        function setupSpeechButtons() {
+            // 获取所有问题标题
+            const questionTitles = document.querySelectorAll('.question-title span');
+            
+            // 遍历每个标题
+            questionTitles.forEach(titleSpan => {
+                const title = titleSpan.textContent;
+                
+                // 检查标题是否包含英文（至少包含3个连续的英文字母）
+                if (/[a-zA-Z]{3,}/.test(title)) {
+                    // 创建播放按钮
+                    const speakBtn = document.createElement('button');
+                    speakBtn.className = 'speak-btn';
+                    speakBtn.textContent = '播放英文';
+                    speakBtn.setAttribute('title', '播放题目英文');
+                    speakBtn.setAttribute('type', 'button'); // 确保不是默认提交按钮
+                    
+                    // 将按钮添加到标题后面
+                    titleSpan.parentElement.insertBefore(speakBtn, titleSpan.nextSibling);
+                    
+                    // 显示按钮
+                    speakBtn.style.display = 'inline-block';
+                    
+                    // 添加点击事件 - 同时处理点击和触摸
+                    speakBtn.addEventListener('click', function(event) {
+                        speak(title, event);
+                    });
+                    
+                    // 为移动设备添加触摸事件
+                    speakBtn.addEventListener('touchstart', function(event) {
+                        // 阻止触摸事件后的点击事件，防止双重触发
+                        event.preventDefault();
+                        speak(title, event);
+                    }, { passive: false });
+                }
+            });
+        }
+        
+        // 语音播放函数
+        function speak(text, event) {
+            // 防止事件冒泡和默认行为
+            event.preventDefault();
+            event.stopPropagation();
+            
+            // 检查浏览器是否支持语音合成API
+            if (!window.speechSynthesis) {
+                alert('很抱歉，您的浏览器不支持语音合成功能。请尝试使用Chrome、Edge或Safari浏览器。');
+                return;
+            }
+            
+            try {
+                // 停止当前正在播放的语音
+                window.speechSynthesis.cancel();
+                
+                // 获取所有播放按钮
+                const allSpeakButtons = document.querySelectorAll('.speak-btn');
+                allSpeakButtons.forEach(btn => {
+                    btn.classList.remove('speaking');
+                });
+                
+                // 设置当前按钮状态
+                const button = event.currentTarget;
+                button.classList.add('speaking');
+                button.textContent = '播放中...';
+                
+                // 创建语音对象
+                const speech = new SpeechSynthesisUtterance();
+                speech.text = text;
+                speech.lang = 'en-US';
+                speech.rate = 0.9;  // 语速稍慢一点
+                speech.pitch = 1;
+                
+                // 语音结束时恢复按钮状态
+                speech.onend = function() {
+                    button.classList.remove('speaking');
+                    button.textContent = '播放英文';
+                };
+                
+                // 语音出错时处理
+                speech.onerror = function(event) {
+                    console.error('语音合成错误:', event);
+                    button.classList.remove('speaking');
+                    button.textContent = '播放失败';
+                    
+                    setTimeout(() => {
+                        button.textContent = '播放英文';
+                    }, 2000);
+                };
+                
+                // 解决Safari在iOS上的问题
+                if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+                    setTimeout(() => {
+                        window.speechSynthesis.speak(speech);
+                    }, 100);
+                } else {
+                    window.speechSynthesis.speak(speech);
+                }
+            } catch (error) {
+                console.error('语音合成出现异常:', error);
+                alert('语音播放失败，请尝试使用其他浏览器。');
+            }
+        }
+        
+        // 添加目录导航功能
+        window.addEventListener('DOMContentLoaded', function() {
+            // 初始化统计信息
+            updateStats();
+            
+            // 设置中文注释显示/隐藏功能
+            setupChineseNotes();
+            
+            // 设置题目点击事件
+            setupQuestionClick();
+            
+            // 设置筛选按钮事件
+            document.getElementById('show-all-types').addEventListener('click', () => filterQuestions('all-types'));
+            document.getElementById('show-definitions').addEventListener('click', () => filterQuestions('definitions'));
+            document.getElementById('show-short-answers').addEventListener('click', () => filterQuestions('short-answers'));
+            
+            // 默认激活"全部题型"按钮
+            document.getElementById('show-all-types').classList.add('active');
+            document.getElementById('side-show-all-types').classList.add('active');
+            
+            // 不再调用语音按钮设置函数
+            // setupSpeechButtons();
+            
+            // 为章节添加ID，便于导航
+            const chapters = document.querySelectorAll('.chapter h2');
+            chapters.forEach((chapter, index) => {
+                chapter.id = 'chapter-' + (index + 1);
+            });
+            
+            // 检查页面中是否已经存在导航面板
+            if (!document.querySelector('.nav-panel')) {
+                // 创建目录容器
+                const nav = document.createElement('div');
+                nav.className = 'nav-panel';
+                
+                // 添加目录标题
+                const navTitle = document.createElement('h3');
+                navTitle.textContent = '目录导航';
+                nav.appendChild(navTitle);
+                
+                // 创建目录列表
+                const navList = document.createElement('div');
+                navList.className = 'nav-list';
+                
+                // 为每个章节创建导航链接
+                chapters.forEach((chapter, index) => {
+                    const link = document.createElement('a');
+                    link.textContent = chapter.textContent;
+                    link.href = '#chapter-' + (index + 1);
+                    link.className = 'nav-link';
+                    
+                    // 添加点击事件
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        chapter.scrollIntoView({ behavior: 'smooth' });
+                    });
+                    
+                    navList.appendChild(link);
+                });
+                
+                nav.appendChild(navList);
+                
+                // 将导航插入到控制面板之后
+                const controlPanel = document.querySelector('.control-panel');
+                controlPanel.parentNode.insertBefore(nav, controlPanel.nextSibling);
+            }
+            
+            // 为侧边导航链接添加事件和章节内容
+            const sideNavLinks = document.getElementById('sideNavLinks');
+            // 先清空侧边导航链接
+            sideNavLinks.innerHTML = '';
+            
+            // 为每个章节创建侧边导航链接
+            chapters.forEach((chapter, index) => {
+                const sideLink = document.createElement('a');
+                sideLink.textContent = chapter.textContent;
+                sideLink.href = '#chapter-' + (index + 1);
+                sideLink.className = 'side-nav-link';
+                
+                // 添加点击事件
+                sideLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    chapter.scrollIntoView({ behavior: 'smooth' });
+                    
+                    // 关闭侧边栏
+                    document.getElementById('sideNav').classList.remove('open');
+                    document.getElementById('overlay').classList.remove('open');
+                });
+                
+                sideNavLinks.appendChild(sideLink);
+            });
+        });
+        
+        // 侧边导航栏控制
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const closeSideNav = document.getElementById('closeSideNav');
+        const sideNav = document.getElementById('sideNav');
+        const overlay = document.getElementById('overlay');
+        
+        // 打开侧边导航
+        hamburgerBtn.addEventListener('click', function() {
+            sideNav.classList.add('open');
+            overlay.classList.add('open');
+        });
+        
+        // 关闭侧边导航
+        closeSideNav.addEventListener('click', function() {
+            sideNav.classList.remove('open');
+            overlay.classList.remove('open');
+        });
+        
+        // 点击遮罩层关闭侧边导航
+        overlay.addEventListener('click', function() {
+            sideNav.classList.remove('open');
+            overlay.classList.remove('open');
+        });
+        
+        // 返回顶部按钮功能
+        const backToTopButton = document.getElementById('backToTop');
+        
+        // 滚动显示/隐藏返回顶部按钮
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+        
+        // 点击返回顶部
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // 随机测试功能
+        const modal = document.getElementById('testModal');
+        const randomTestBtn = document.getElementById('random-test');
+        const closeBtn = document.querySelector('.close-btn');
+        const testOptions = document.querySelector('.test-options');
+        const questionContainer = document.getElementById('randomQuestionContainer');
+        
+        // 打开模态窗口
+        randomTestBtn.addEventListener('click', function() {
+            modal.style.display = 'block';
+            
+            // 清空之前的选项
+            testOptions.innerHTML = '';
+            
+            // 添加章节按钮
+            const chapters = document.querySelectorAll('.chapter h2');
+            chapters.forEach((chapter, index) => {
+                const chapterBtn = document.createElement('button');
+                chapterBtn.className = 'chapter-btn';
+                chapterBtn.textContent = chapter.textContent;
+                chapterBtn.dataset.index = index;
+                chapterBtn.addEventListener('click', function() {
+                    generateRandomQuestion(index);
+                });
+                testOptions.appendChild(chapterBtn);
+            });
+            
+            // 添加"全部"按钮
+            const allBtn = document.createElement('button');
+            allBtn.className = 'all-btn';
+            allBtn.textContent = '全部章节';
+            allBtn.addEventListener('click', function() {
+                generateRandomQuestion(-1); // -1 表示所有章节
+            });
+            testOptions.appendChild(allBtn);
+        });
+        
+        // 关闭模态窗口
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        // 点击模态窗口外部关闭
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // 生成随机题目
+        function generateRandomQuestion(chapterIndex) {
+            // 准备获取题目
+            let questions = [];
+            const chapters = document.querySelectorAll('.chapter');
+            
+            if (chapterIndex === -1) {
+                // 从所有章节获取题目
+                document.querySelectorAll('.question').forEach(question => {
+                    const title = question.querySelector('.question-title span').textContent;
+                    const answer = question.querySelector('.answer').innerHTML;
+                    const chapterTitle = question.closest('.chapter').querySelector('h2').textContent;
+                    questions.push({ title, answer, chapterTitle });
+                });
+            } else {
+                // 从特定章节获取题目
+                const chapter = chapters[chapterIndex];
+                const chapterTitle = chapter.querySelector('h2').textContent;
+                chapter.querySelectorAll('.question').forEach(question => {
+                    const title = question.querySelector('.question-title span').textContent;
+                    const answer = question.querySelector('.answer').innerHTML;
+                    questions.push({ title, answer, chapterTitle });
+                });
+            }
+            
+            // 随机选择一个题目
+            if (questions.length > 0) {
+                const randomIndex = Math.floor(Math.random() * questions.length);
+                const randomQuestion = questions[randomIndex];
+                
+                // 显示随机题目
+                questionContainer.innerHTML = `
+                    <div class="random-question">
+                        <h3>来自 ${randomQuestion.chapterTitle} 的随机题目</h3>
+                        <div class="random-question-text">${randomQuestion.title}</div>
+                        <button class="show-random-answer">显示答案</button>
+                        <div class="random-answer">${randomQuestion.answer}</div>
+                        <button class="generate-btn">生成新题目</button>
+                    </div>
+                `;
+                
+                // 显示/隐藏答案功能
+                const showAnswerBtn = questionContainer.querySelector('.show-random-answer');
+                const answerDiv = questionContainer.querySelector('.random-answer');
+                
+                showAnswerBtn.addEventListener('click', function() {
+                    if (answerDiv.style.display === 'block') {
+                        answerDiv.style.display = 'none';
+                        showAnswerBtn.textContent = '显示答案';
+                    } else {
+                        answerDiv.style.display = 'block';
+                        showAnswerBtn.textContent = '隐藏答案';
+                    }
+                });
+                
+                // 生成新题目按钮
+                const generateNewBtn = questionContainer.querySelector('.generate-btn');
+                generateNewBtn.addEventListener('click', function() {
+                    generateRandomQuestion(chapterIndex);
+                });
+                
+                // 为随机题目添加语音播放按钮（如果是英文题目）
+                const randomQuestionText = questionContainer.querySelector('.random-question-text');
+                const title = randomQuestionText.textContent;
+                
+                if (/[a-zA-Z]{3,}/.test(title)) {
+                    const speakBtn = document.createElement('button');
+                    speakBtn.className = 'speak-btn';
+                    speakBtn.textContent = '播放英文';
+                    speakBtn.style.display = 'inline-block';
+                    speakBtn.style.marginTop = '10px';
+                    speakBtn.setAttribute('type', 'button');
+                    
+                    // 添加到显示答案按钮前面
+                    showAnswerBtn.parentElement.insertBefore(speakBtn, showAnswerBtn);
+                    
+                    // 添加点击事件
+                    speakBtn.addEventListener('click', function(event) {
+                        speak(title, event);
+                    });
+                    
+                    // 为移动设备添加触摸事件
+                    speakBtn.addEventListener('touchstart', function(event) {
+                        event.preventDefault();
+                        speak(title, event);
+                    }, { passive: false });
+                }
+            }
+        }
+        
+        // 添加侧边栏控制按钮功能
+        document.getElementById('side-show-all').addEventListener('click', function() {
+            const answers = document.querySelectorAll('.answer');
+            
+            answers.forEach(answer => {
+                answer.style.display = 'block';
+                // 更新按钮状态（即使不可见）
+                const button = answer.previousElementSibling.querySelector('.show-btn');
+                if (button) {
+                    button.textContent = '隐藏答案';
+                }
+                // 更新问题容器状态
+                answer.parentElement.classList.add('answer-visible');
+            });
+            // 更新统计信息
+            updateStats();
+            // 关闭侧边栏
+            document.getElementById('sideNav').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+        });
+        
+        document.getElementById('side-hide-all').addEventListener('click', function() {
+            const answers = document.querySelectorAll('.answer');
+            
+            answers.forEach(answer => {
+                answer.style.display = 'none';
+                // 更新按钮状态（即使不可见）
+                const button = answer.previousElementSibling.querySelector('.show-btn');
+                if (button) {
+                    button.textContent = '显示答案';
+                }
+                // 更新问题容器状态
+                answer.parentElement.classList.remove('answer-visible');
+            });
+            // 更新统计信息
+            updateStats();
+            // 关闭侧边栏
+            document.getElementById('sideNav').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+        });
+        
+        document.getElementById('side-random-test').addEventListener('click', function() {
+            // 关闭侧边栏
+            document.getElementById('sideNav').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+            
+            // 打开随机测试模态窗口
+            const modal = document.getElementById('testModal');
+            modal.style.display = 'block';
+            
+            // 清空之前的选项
+            const testOptions = document.querySelector('.test-options');
+            testOptions.innerHTML = '';
+            
+            // 添加章节按钮
+            const chapters = document.querySelectorAll('.chapter h2');
+            chapters.forEach((chapter, index) => {
+                const chapterBtn = document.createElement('button');
+                chapterBtn.className = 'chapter-btn';
+                chapterBtn.textContent = chapter.textContent;
+                chapterBtn.dataset.index = index;
+                chapterBtn.addEventListener('click', function() {
+                    generateRandomQuestion(index);
+                });
+                testOptions.appendChild(chapterBtn);
+            });
+            
+            // 添加"全部"按钮
+            const allBtn = document.createElement('button');
+            allBtn.className = 'all-btn';
+            allBtn.textContent = '全部章节';
+            allBtn.addEventListener('click', function() {
+                generateRandomQuestion(-1); // -1 表示所有章节
+            });
+            testOptions.appendChild(allBtn);
+        });
+        
+        // 显示所有答案按钮功能 (桌面版)
+        document.getElementById('show-all').addEventListener('click', function() {
+            const answers = document.querySelectorAll('.answer');
+            const questions = document.querySelectorAll('.question');
+            
+            answers.forEach(answer => {
+                answer.style.display = 'block';
+                // 更新按钮状态（即使不可见）
+                const button = answer.previousElementSibling.querySelector('.show-btn');
+                if (button) {
+                    button.textContent = '隐藏答案';
+                }
+                // 更新问题容器状态
+                answer.parentElement.classList.add('answer-visible');
+            });
+            // 更新统计信息
+            updateStats();
+        });
+        
+        // 隐藏所有答案按钮功能 (桌面版)
+        document.getElementById('hide-all').addEventListener('click', function() {
+            const answers = document.querySelectorAll('.answer');
+            const questions = document.querySelectorAll('.question');
+            
+            answers.forEach(answer => {
+                answer.style.display = 'none';
+                // 更新按钮状态（即使不可见）
+                const button = answer.previousElementSibling.querySelector('.show-btn');
+                if (button) {
+                    button.textContent = '显示答案';
+                }
+                // 更新问题容器状态
+                answer.parentElement.classList.remove('answer-visible');
+            });
+            // 更新统计信息
+            updateStats();
+        });
+        
+        // 随机测试按钮功能 (桌面版)
+        document.getElementById('random-test').addEventListener('click', function() {
+            const modal = document.getElementById('testModal');
+            modal.style.display = 'block';
+            
+            // 清空之前的选项
+            const testOptions = document.querySelector('.test-options');
+            testOptions.innerHTML = '';
+            
+            // 添加章节按钮
+            const chapters = document.querySelectorAll('.chapter h2');
+            chapters.forEach((chapter, index) => {
+                const chapterBtn = document.createElement('button');
+                chapterBtn.className = 'chapter-btn';
+                chapterBtn.textContent = chapter.textContent;
+                chapterBtn.dataset.index = index;
+                chapterBtn.addEventListener('click', function() {
+                    generateRandomQuestion(index);
+                });
+                testOptions.appendChild(chapterBtn);
+            });
+            
+            // 添加"全部"按钮
+            const allBtn = document.createElement('button');
+            allBtn.className = 'all-btn';
+            allBtn.textContent = '全部章节';
+            allBtn.addEventListener('click', function() {
+                generateRandomQuestion(-1); // -1 表示所有章节
+            });
+            testOptions.appendChild(allBtn);
+        });
+        
+        // 添加侧边栏筛选按钮功能
+        document.getElementById('side-show-all-types').addEventListener('click', function() {
+            filterQuestions('all-types');
+            // 关闭侧边栏
+            document.getElementById('sideNav').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+        });
+        
+        document.getElementById('side-show-definitions').addEventListener('click', function() {
+            filterQuestions('definitions');
+            // 关闭侧边栏
+            document.getElementById('sideNav').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+        });
+        
+        document.getElementById('side-show-short-answers').addEventListener('click', function() {
+            filterQuestions('short-answers');
+            // 关闭侧边栏
+            document.getElementById('sideNav').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+        });
+        
+        // 更新统计信息
+        function updateStats() {
+            // 计算总题目数
+            const totalQuestions = document.querySelectorAll('.question').length;
+            document.getElementById('total-questions').textContent = totalQuestions;
+            
+            // 计算答案总字数
+            let totalWords = 0;
+            const answers = document.querySelectorAll('.answer');
+            
+            answers.forEach(answer => {
+                // 只计算p标签内的纯文本内容
+                const paragraphs = answer.querySelectorAll('p');
+                paragraphs.forEach(paragraph => {
+                    // 去除HTML标签，只计算纯文本
+                    const text = paragraph.textContent.trim();
+                    
+                    // 排除空段落
+                    if (text.length > 0) {
+                        totalWords += text.length;
+                    }
+                });
+            });
+            
+            // 格式化大数字，每三位数字添加逗号分隔
+            const formattedTotalWords = totalWords.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('total-words').textContent = formattedTotalWords;
+        }
+        
+        // 筛选题型功能
+        function filterQuestions(type) {
+            // 获取所有筛选按钮并重置激活状态
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // 获取当前点击的按钮并设置为激活状态
+            const currentButton = document.getElementById(`show-${type}`);
+            if (currentButton) {
+                currentButton.classList.add('active');
+            }
+            
+            // 同时更新侧边栏按钮状态
+            const sideButtons = document.querySelectorAll('.side-nav-btn');
+            sideButtons.forEach(btn => btn.classList.remove('active'));
+            const currentSideButton = document.getElementById(`side-show-${type}`);
+            if (currentSideButton) {
+                currentSideButton.classList.add('active');
+            }
+            
+            // 获取所有问题
+            const questions = document.querySelectorAll('.question');
+            
+            if (type === 'all-types') {
+                // 显示所有题目
+                questions.forEach(question => {
+                    question.style.display = 'block';
+                });
+            } else if (type === 'definitions') {
+                // 筛选名词解释
+                questions.forEach(question => {
+                    const title = question.querySelector('.question-title span').textContent;
+                    
+                    // 更精确的名词解释识别逻辑
+                    // 1. 标准格式：英文词汇后跟中文解释，如 "Information system（信息系统）"
+                    // 2. 单个英文短语且长度合理的也是名词解释
+                    const isEnglishWithChinesePattern = /[A-Za-z\s\-\(\)]+（[\u4e00-\u9fa5]+）/.test(title);
+                    const isShortEnglishTerm = title.length < 40 && /^[A-Za-z\s\-\(\)]+$/.test(title);
+                    
+                    // 排除简答题的关键字
+                    const hasSimpleAnswerKeywords = 
+                        title.toLowerCase().includes('describe') || 
+                        title.toLowerCase().includes('list') || 
+                        title.toLowerCase().includes('compare') ||
+                        title.toLowerCase().includes('distinguish') ||
+                        title.toLowerCase().includes('define and') ||
+                        title.toLowerCase().includes('what is') ||
+                        title.toLowerCase().includes('how does');
+                    
+                    if ((isEnglishWithChinesePattern || isShortEnglishTerm) && !hasSimpleAnswerKeywords) {
+                        question.style.display = 'block';
+                    } else {
+                        question.style.display = 'none';
+                    }
+                });
+            } else if (type === 'short-answers') {
+                // 筛选简答题
+                questions.forEach(question => {
+                    const title = question.querySelector('.question-title span').textContent;
+                    
+                    // 简答题特征
+                    // 1. 包含特定动词开头：List, Describe, Compare, Define, Distinguish, What is, How
+                    // 2. 较长的问句
+                    const hasSimpleAnswerKeywords = 
+                        title.toLowerCase().includes('describe') || 
+                        title.toLowerCase().includes('list') || 
+                        title.toLowerCase().includes('compare') ||
+                        title.toLowerCase().includes('distinguish') ||
+                        title.toLowerCase().includes('define and') ||
+                        title.toLowerCase().includes('what is') ||
+                        title.toLowerCase().includes('how does');
+                    
+                    // 使用正则表达式匹配以上述关键词开头的模式
+                    const startsWithKeyword = /^(List|Describe|Compare|Distinguish|Define|What|How)\b/i.test(title);
+                    
+                    // 长句子通常是简答题，但要排除名词解释
+                    const isLongSentence = title.length > 40;
+                    const isNotDefinition = !/[A-Za-z\s\-\(\)]+（[\u4e00-\u9fa5]+）/.test(title);
+                    
+                    if ((hasSimpleAnswerKeywords || startsWithKeyword || (isLongSentence && isNotDefinition))) {
+                        question.style.display = 'block';
+                    } else {
+                        question.style.display = 'none';
+                    }
+                });
+            }
+            
+            // 更新可见的题目数量
+            const visibleQuestions = document.querySelectorAll('.question[style="display: block;"]').length;
+            document.getElementById('total-questions').textContent = `${visibleQuestions} / ${questions.length}`;
+        }
+        
+        // 添加按钮控制区域
+        const sideNavContent = document.querySelector('.side-nav-content');
+        if (sideNavContent) {
+            // 创建按钮控制区域
+            const buttonsControlSection = document.createElement('div');
+            buttonsControlSection.className = 'side-nav-section';
+            buttonsControlSection.id = 'buttons-control-section';
+            
+            const buttonsControlTitle = document.createElement('div');
+            buttonsControlTitle.className = 'side-nav-title';
+            buttonsControlTitle.textContent = '按钮显示控制';
+            
+            const buttonsControlContent = document.createElement('div');
+            buttonsControlContent.className = 'side-nav-control';
+            
+            // 创建控制所有按钮的按钮
+            const toggleAllButtonsBtn = document.createElement('button');
+            toggleAllButtonsBtn.className = 'side-nav-btn';
+            toggleAllButtonsBtn.id = 'toggle-all-buttons';
+            toggleAllButtonsBtn.textContent = '隐藏所有按钮';
+            toggleAllButtonsBtn.setAttribute('aria-label', '显示或隐藏题目后的所有按钮');
+            
+            toggleAllButtonsBtn.addEventListener('click', function() {
+                const body = document.body;
+                if (body.classList.contains('question-buttons-hidden')) {
+                    // 当前按钮已隐藏，需要显示
+                    body.classList.remove('question-buttons-hidden');
+                    this.textContent = '隐藏所有按钮';
+                } else {
+                    // 当前按钮已显示，需要隐藏
+                    body.classList.add('question-buttons-hidden');
+                    this.textContent = '显示所有按钮';
+                }
+            });
+            
+            // 组装控制区域
+            buttonsControlContent.appendChild(toggleAllButtonsBtn);
+            buttonsControlSection.appendChild(buttonsControlTitle);
+            buttonsControlSection.appendChild(buttonsControlContent);
+            
+            // 查找中文控制区
+            const chineseToggleSection = document.getElementById('chinese-toggle-section');
+            if (chineseToggleSection) {
+                // 将按钮控制区插入到中文控制区后面
+                sideNavContent.insertBefore(buttonsControlSection, chineseToggleSection.nextSibling);
+            } else {
+                // 如果没有找到中文控制区，则插入到第一个区域后面
+                const firstSection = sideNavContent.querySelector('.side-nav-section');
+                if (firstSection && firstSection.nextSibling) {
+                    sideNavContent.insertBefore(buttonsControlSection, firstSection.nextSibling.nextSibling);
+                } else {
+                    sideNavContent.appendChild(buttonsControlSection);
+                }
+            }
+            
+            // 添加一个固定的恢复按钮图标（当所有按钮被隐藏时可见）
+            const restoreButtonsIcon = document.createElement('div');
+            restoreButtonsIcon.id = 'restore-buttons-icon';
+            restoreButtonsIcon.innerHTML = '<div>⚙️</div>';
+            restoreButtonsIcon.setAttribute('title', '显示所有按钮');
+            
+            restoreButtonsIcon.addEventListener('click', function() {
+                // 恢复按钮显示
+                document.body.classList.remove('question-buttons-hidden');
+                // 同步更新侧边栏按钮状态
+                const toggleAllButtonsBtn = document.getElementById('toggle-all-buttons');
+                if (toggleAllButtonsBtn) {
+                    toggleAllButtonsBtn.textContent = '隐藏所有按钮';
+                }
+                // 关闭侧边栏（如果已经打开）
+                const sideNav = document.getElementById('sideNav');
+                const overlay = document.getElementById('overlay');
+                if (sideNav.classList.contains('open')) {
+                    sideNav.classList.remove('open');
+                    overlay.classList.remove('open');
+                }
+                
+                // 短暂显示提示消息
+                const messageContainer = document.createElement('div');
+                messageContainer.style.position = 'fixed';
+                messageContainer.style.bottom = '120px';
+                messageContainer.style.left = '50%';
+                messageContainer.style.transform = 'translateX(-50%)';
+                messageContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+                messageContainer.style.color = 'white';
+                messageContainer.style.padding = '8px 16px';
+                messageContainer.style.borderRadius = '20px';
+                messageContainer.style.fontSize = '14px';
+                messageContainer.style.zIndex = '1000';
+                messageContainer.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.3)';
+                messageContainer.textContent = '按钮已恢复显示';
+                
+                document.body.appendChild(messageContainer);
+                
+                // 2秒后移除提示
+                setTimeout(() => {
+                    messageContainer.style.opacity = '0';
+                    messageContainer.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => {
+                        if (messageContainer.parentNode) {
+                            messageContainer.parentNode.removeChild(messageContainer);
+                        }
+                    }, 500);
+                }, 2000);
+            });
+            
+            document.body.appendChild(restoreButtonsIcon);
+        }
+        
+        // 添加新的题目点击事件处理函数
+        function setupQuestionClick() {
+            // 获取所有问题标题
+            const questionTitles = document.querySelectorAll('.question-title');
+            
+            // 遍历每个标题
+            questionTitles.forEach(title => {
+                // 检查初始状态
+                const answer = title.nextElementSibling;
+                if (answer && answer.style.display === 'block') {
+                    title.parentElement.classList.add('answer-visible');
+                }
+                
+                // 添加点击事件
+                title.addEventListener('click', function(e) {
+                    // 忽略如果点击的是按钮本身
+                    if (e.target.tagName === 'BUTTON') {
+                        return;
+                    }
+                    
+                    // 找到当前问题的答案区域
+                    const answer = this.nextElementSibling;
+                    // 找到问题容器
+                    const questionContainer = this.parentElement;
+                    
+                    // 切换答案的显示状态
+                    if (answer.style.display === 'block') {
+                        answer.style.display = 'none';
+                        questionContainer.classList.remove('answer-visible');
+                        // 更新按钮文本（即使按钮不可见，为了保持状态一致）
+                        const button = this.querySelector('.show-btn');
+                        if (button) {
+                            button.textContent = '显示答案';
+                        }
+                    } else {
+                        answer.style.display = 'block';
+                        questionContainer.classList.add('answer-visible');
+                        // 更新按钮文本（即使按钮不可见，为了保持状态一致）
+                        const button = this.querySelector('.show-btn');
+                        if (button) {
+                            button.textContent = '隐藏答案';
+                        }
+                    }
+                    
+                    // 更新统计信息
+                    updateStats();
+                });
+                
+                // 为了保持点击时的视觉反馈，添加一个按下效果
+                title.addEventListener('mousedown', function() {
+                    this.style.backgroundColor = 'rgba(52, 152, 219, 0.2)';
+                });
+                
+                title.addEventListener('mouseup', function() {
+                    this.style.backgroundColor = '';
+                });
+                
+                // 触摸设备支持
+                title.addEventListener('touchstart', function() {
+                    this.style.backgroundColor = 'rgba(52, 152, 219, 0.2)';
+                }, { passive: true });
+                
+                title.addEventListener('touchend', function() {
+                    this.style.backgroundColor = '';
+                }, { passive: true });
+            });
+        }
+    </script>
+</body>
+</html> 
